@@ -18,6 +18,8 @@ public class User extends Timestamped {
     private String username;
     @Column(nullable = false)
     private String password;
+    @Column
+    private String info;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
