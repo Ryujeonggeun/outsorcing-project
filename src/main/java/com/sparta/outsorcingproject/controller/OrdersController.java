@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.outsorcingproject.dto.OrdersRequestDto;
+import com.sparta.outsorcingproject.dto.OrdersResponseDto;
 import com.sparta.outsorcingproject.entity.User;
 import com.sparta.outsorcingproject.service.OrdersService;
 
@@ -19,13 +20,12 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/orders")
 public class OrdersController {
 
-	private final String CREATE_ORDERS = "주문 생성 완료";
 	private final OrdersService ordersService;
 
 	@PostMapping("/{storeId}")
-	public ResponseEntity<String> createOrders(@AuthenticationPrincipal User user,
+	public ResponseEntity<OrdersResponseDto> createOrders(@AuthenticationPrincipal User user,
 		@PathVariable long storeId, OrdersRequestDto requestDto) {
-		ordersService.createOrders(user, storeId, requestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(CREATE_ORDERS);
+		OrdersResponseDto responseDto = ordersService.createOrders(user, storeId, requestDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 }
