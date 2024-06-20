@@ -74,14 +74,7 @@ public class ReviewService {
         User user = new User();
 
         // 2.reviewId 로 리뷰 찾아오기 -> 없다면 예외 발생시키기
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
-                new IllegalArgumentException(
-                        messageSource.getMessage(
-                                "not.find.review",
-                                null,
-                                Locale.getDefault()
-                        ))
-        );
+        Review review = getReviewBYId(reviewId);
 
         // 1의 유저와 2의 유저 같은지 비교하기
         if (!review.getUser().getId().equals(user.getId())) {
@@ -92,10 +85,48 @@ public class ReviewService {
         return ResponseEntity.ok("리뷰 수정 완료");
     }
 
+
+
     // 2.reviewId 로 리뷰 찾아오기 -> 없다면 예외 발생시키기
     public ResponseEntity<ReviewResponseDto> getReview(Long reviewId) {
 
         //존재하는 리뷰인지
+        Review review = getReviewBYId(reviewId);
+
+        ReviewResponseDto responseDto = new ReviewResponseDto(review);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+
+    //상점 리뷰 전체 조회
+    public ResponseEntity<List<ReviewResponseDto>> getStoreReviews(Long storeId) {
+        List<Review> reviews = reviewRepository.findByStoreId(storeId);
+        List<ReviewResponseDto> reviewList = reviews.stream().map(ReviewResponseDto::new).toList();
+        return new ResponseEntity<>(reviewList, HttpStatus.OK);
+    }
+
+
+    //리뷰 삭제
+    public ResponseEntity<String> deleteReview(Long reviewId) {
+
+        //구현해야 할것
+        // User -> userDetails 에서 찾아오기
+        User user = new User();
+
+        Review review = getReviewBYId(reviewId);
+
+        //본인이 작성한 리뷰인지 확인하기
+        if (!review.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("본인이 작성한 리뷰가 아닙니다.");
+        }
+
+        reviewRepository.deleteById(reviewId);
+        return ResponseEntity.ok("리뷰 삭제 완료");
+    }
+
+
+    private Review getReviewBYId(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
                 new IllegalArgumentException(
                         messageSource.getMessage(
@@ -104,25 +135,7 @@ public class ReviewService {
                                 Locale.getDefault()
                         ))
         );
-
-        ReviewResponseDto responseDto = new ReviewResponseDto(review);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-    }
-
-
-
-
-    //상점 리뷰 전체 조회
-    public ResponseEntity<List<ReviewResponseDto>> getStoreReviews(Long storeId) {
-        return null;
-    }
-
-
-
-    //리뷰 삭제
-    public ResponseEntity<String> deleteReview(Long reviewId) {
-        return null;
+        return review;
     }
 
 
