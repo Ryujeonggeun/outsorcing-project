@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Orders extends Timestamped {
+public class Orders {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Orders extends Timestamped {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id")
-	private User user;
+	private User users;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_id")
