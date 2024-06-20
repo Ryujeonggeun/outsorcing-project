@@ -20,7 +20,7 @@ public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bigint;
+    private Long id;
 
     @Column(nullable = false)
     private String storeName;
