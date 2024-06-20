@@ -48,7 +48,7 @@ public class ReviewService {
         );
 
         // 1의 유저와 2의 유저 같은지 비교하기
-        if (!orders.getUsers().getId().equals(user.getId())) {
+        if (!orders.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("본인이 요청한 주문이 아닙니다.");
         }
 
