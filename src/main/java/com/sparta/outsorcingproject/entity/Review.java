@@ -3,13 +3,15 @@ package com.sparta.outsorcingproject.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Review {
+@NoArgsConstructor
+public class Review extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +22,7 @@ public class Review {
 
     @OneToOne
     @JoinColumn(name = "orders_id")
-    private Orders order;
+    private Orders orders;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
@@ -32,6 +34,19 @@ public class Review {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    public Review(User user, Orders orders, Store store, String review, Double rate) {
+        this.user = user;
+        this.orders = orders;
+        this.store = store;
+        this.review = review;
+        this.rate = rate;
+        this.createdAt = LocalDateTime.now();
+    }
 
+    public void updateReview(String review, Double rate) {
+        this.review = review;
+        this.rate = rate;
+        this.modifiedAt = LocalDateTime.now();
+    }
 
 }
