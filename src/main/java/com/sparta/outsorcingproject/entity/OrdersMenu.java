@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class OrdersMenu {
+public class OrdersMenu extends Timestamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +32,9 @@ public class OrdersMenu {
 
 	private long quantity;
 
+	public OrdersMenu(Orders orders, Menu menu, long quantity) {
+		this.orders = orders;
+		this.menu = menu;
+		this.quantity = quantity;
+	}
 }
