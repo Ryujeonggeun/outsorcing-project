@@ -1,6 +1,6 @@
 package com.sparta.outsorcingproject.entity;
 
-import java.awt.*;
+import com.sparta.outsorcingproject.dto.OrdersMenuRequestDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +21,7 @@ public class OrdersMenu extends Timestamped {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@OneToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orders_id")
 	private Orders orders;
 
@@ -32,9 +31,13 @@ public class OrdersMenu extends Timestamped {
 
 	private long quantity;
 
-	public OrdersMenu(Orders orders, Menu menu, long quantity) {
-		this.orders = orders;
+	public OrdersMenu(OrdersMenuRequestDto ordersMenuDto, Orders orders, Menu menu, long totalPrice) {
 		this.menu = menu;
-		this.quantity = quantity;
+		this.quantity = ordersMenuDto.getQuantity();
+		this.orders = orders;
+	}
+
+	public void addOrders(Orders orders) {
+		this.orders = orders;
 	}
 }
