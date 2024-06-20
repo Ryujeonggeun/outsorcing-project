@@ -1,5 +1,8 @@
 package com.sparta.outsorcingproject.entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,5 +31,22 @@ public class Orders extends Timestamped {
 	@JoinColumn(name = "store_id")
 	private Store store;
 
+	@OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<OrdersMenu> ordersMenu;
+
 	private long totalPrice;
+
+	public Orders(User user, Store store) {
+		this.user = user;
+		this.store = store;
+	}
+
+	public void addOrdersMenu(OrdersMenu ordersMenu) {
+		this.ordersMenu.add(ordersMenu);
+		ordersMenu.addOrders(this);
+	}
+
+	public void setTotalPrice(long totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 }
