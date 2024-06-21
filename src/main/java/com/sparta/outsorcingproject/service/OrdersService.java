@@ -39,7 +39,7 @@ public class OrdersService {
 	public OrdersResponseDto createOrders(User user, long storeId, OrdersRequestDto requestDto) {
 
 		Store store = storeRepository.findById(storeId).orElseThrow(
-			() -> new IllegalStateException(
+			() -> new IllegalArgumentException(
 				messageSource.getMessage("not.find.store", null, Locale.getDefault())
 			)
 		);
@@ -55,13 +55,13 @@ public class OrdersService {
 	@Transactional
 	public OrdersResponseDto editOrders(User user, long ordersId, OrdersRequestDto requestDto) {
 		Orders orders = ordersRepository.findById(ordersId).orElseThrow(
-			() -> new IllegalStateException(
+			() -> new IllegalArgumentException(
 				messageSource.getMessage("not.find.orders", null, Locale.getDefault())
 			)
 		);
 
 		if (!orders.getUser().equals(user)) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 				messageSource.getMessage("mismatch.user", null, Locale.getDefault())
 			);
 		}
@@ -76,7 +76,7 @@ public class OrdersService {
 
 		for (OrdersMenuRequestDto ordersMenuDto : requestDto.getOrdersMenuList()) {
 			Menu menu = menuRepository.findById(ordersMenuDto.getMenuId()).orElseThrow(
-				() -> new IllegalStateException(
+				() -> new IllegalArgumentException(
 					messageSource.getMessage("not.find.menu", null, Locale.getDefault())
 				)
 			);
@@ -101,5 +101,16 @@ public class OrdersService {
 		}
 
 		return responseDtoList;
+	}
+
+	public OrdersResponseDto find(long ordersId) {
+
+		Orders orders = ordersRepository.findById(ordersId).orElseThrow(
+			() -> new IllegalArgumentException(
+				messageSource.getMessage("not.find.orders", null, Locale.getDefault())
+			)
+		);
+
+		return new OrdersResponseDto(orders);
 	}
 }

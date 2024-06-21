@@ -40,7 +40,7 @@ public class OrdersController {
 		@PathVariable long orders_id, OrdersRequestDto requestDto) {
 
 		OrdersResponseDto responseDto = ordersService.editOrders(user, orders_id, requestDto);
-		return ResponseEntity.status(200).body(responseDto);
+		return ResponseEntity.ok().body(responseDto);
 	}
 
 	@GetMapping
@@ -52,5 +52,14 @@ public class OrdersController {
 		List<OrdersResponseDto> responseDtoList = ordersService.findAll(page, size);
 
 		return ResponseEntity.ok().body(responseDtoList);
+	}
+
+	@GetMapping("/{ordersId}")
+	public ResponseEntity<OrdersResponseDto> getOrders(
+		@PathVariable long ordersId) {
+
+		OrdersResponseDto responseDto = ordersService.find(ordersId);
+
+		return ResponseEntity.ok().body(responseDto);
 	}
 }
