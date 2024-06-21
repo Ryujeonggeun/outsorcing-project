@@ -1,5 +1,6 @@
 package com.sparta.outsorcingproject.dto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class OrdersResponseDto {
 	private final long store_id;
 	private final List<OrdersMenuResponseDto> ordersMenuList = new ArrayList<>();
 	private final long totalPrice;
+	private final LocalDateTime created_at;
+	private final LocalDateTime modified_at;
 
 	public OrdersResponseDto(Orders savedOrders) {
 		this.id = savedOrders.getId();
@@ -25,5 +28,7 @@ public class OrdersResponseDto {
 		for (OrdersMenu ordersMenu : savedOrders.getOrdersMenu()) {
 			ordersMenuList.add(new OrdersMenuResponseDto(ordersMenu));
 		}
+		this.created_at = savedOrders.getCreatedAt();
+		this.modified_at = savedOrders.getModifiedAt();
 	}
 }
