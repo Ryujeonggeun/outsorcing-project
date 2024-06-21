@@ -113,4 +113,20 @@ public class OrdersService {
 
 		return new OrdersResponseDto(orders);
 	}
+
+	public void delete(long ordersId, User user) {
+		Orders orders = ordersRepository.findById(ordersId).orElseThrow(
+			() -> new IllegalArgumentException(
+				messageSource.getMessage("not.find.orders", null, Locale.getDefault())
+			)
+		);
+
+		if(!orders.getUser().equals(user)) {
+			throw new IllegalArgumentException(
+				messageSource.getMessage("mismatch.user", null, Locale.getDefault())
+			);
+		}
+
+		ordersRepository.deleteById(ordersId);
+	}
 }

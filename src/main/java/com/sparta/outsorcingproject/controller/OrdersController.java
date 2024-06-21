@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class OrdersController {
 
 	private final OrdersService ordersService;
+	private final String DELETE = "삭제 완료";
 
 	@PostMapping("/{storeId}")
 	public ResponseEntity<OrdersResponseDto> createOrders(@AuthenticationPrincipal User user,
@@ -61,5 +63,15 @@ public class OrdersController {
 		OrdersResponseDto responseDto = ordersService.find(ordersId);
 
 		return ResponseEntity.ok().body(responseDto);
+	}
+
+	@DeleteMapping("/{ordersId}")
+	public ResponseEntity<String> deleteOrders(
+		@PathVariable long ordersId,
+		@AuthenticationPrincipal User user) {
+
+		ordersService.delete(ordersId, user);
+
+		return ResponseEntity.ok().body(ordersId + DELETE);
 	}
 }
