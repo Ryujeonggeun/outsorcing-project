@@ -1,8 +1,12 @@
 package com.sparta.outsorcingproject.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,5 +88,18 @@ public class OrdersService {
 			savedOrders.setTotalPrice(totalPrice);
 			savedOrders.addOrdersMenu(ordersMenu);
 		}
+	}
+
+	public List<OrdersResponseDto> findAll(int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+
+		Page<Orders> orders = ordersRepository.findAllByOrderByCreatedAtDesc(pageRequest);
+		List<OrdersResponseDto> responseDtoList = new ArrayList<>();
+
+		for (Orders order : orders) {
+			responseDtoList.add(new OrdersResponseDto(order));
+		}
+
+		return responseDtoList;
 	}
 }

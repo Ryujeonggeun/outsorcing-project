@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Orders {
+public class Orders extends Timestamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
