@@ -1,12 +1,11 @@
 package com.sparta.outsorcingproject.entity;
 
+import com.sparta.outsorcingproject.dto.ProfileModifyRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -45,5 +44,21 @@ public class User extends Timestamped {
         this.introduce = introduce;
         this.role = role;
     }
+
+    public void update(ProfileModifyRequestDto requestDto) {
+
+        if (requestDto.getUsername() != null) {
+            this.username = requestDto.getUsername();
+        }
+        if (requestDto.getIntroduce() != null) {
+            this.introduce = requestDto.getIntroduce();
+        }
+        if (requestDto.getNewPassword() != null) {
+            this.password = (requestDto.getNewPassword());
+        }
+    }
+
+
+
 
 }
