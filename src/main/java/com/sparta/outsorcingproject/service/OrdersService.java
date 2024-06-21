@@ -60,34 +60,17 @@ public class OrdersService {
 			)
 		);
 
-		if (!orders.getUser().equals(user)) {
+		if (!orders.getUser().getId().equals(user.getId())) {
 			throw new IllegalArgumentException(
 				messageSource.getMessage("mismatch.user", null, Locale.getDefault())
 			);
 		}
 
+		orders.getOrdersMenu().clear();
+
 		ordersMenuConvert(requestDto, orders);
 
 		return new OrdersResponseDto(orders);
-	}
-
-	private void ordersMenuConvert(OrdersRequestDto requestDto, Orders savedOrders) {
-		long totalPrice = 0;
-
-		for (OrdersMenuRequestDto ordersMenuDto : requestDto.getOrdersMenuList()) {
-			Menu menu = menuRepository.findById(ordersMenuDto.getMenuId()).orElseThrow(
-				() -> new IllegalArgumentException(
-					messageSource.getMessage("not.find.menu", null, Locale.getDefault())
-				)
-			);
-
-			totalPrice += menu.getPrice() * ordersMenuDto.getQuantity();
-
-			OrdersMenu ordersMenu = ordersMenuRepository.save(
-				new OrdersMenu(ordersMenuDto, savedOrders, menu, totalPrice));
-			savedOrders.setTotalPrice(totalPrice);
-			savedOrders.addOrdersMenu(ordersMenu);
-		}
 	}
 
 	public List<OrdersResponseDto> findAll(int page, int size) {
@@ -121,12 +104,32 @@ public class OrdersService {
 			)
 		);
 
-		if(!orders.getUser().equals(user)) {
+		if(!orders.getUser().getId().equals(user.getId())) {
 			throw new IllegalArgumentException(
 				messageSource.getMessage("mismatch.user", null, Locale.getDefault())
 			);
 		}
 
 		ordersRepository.deleteById(ordersId);
+	}
+
+
+	private void ordersMenuConvert(OrdersRequestDto requestDto, Orders savedOrders) {
+		long totalPrice = 0;
+
+		for (OrdersMenuRequestDto ordersMenuDto : requestDto.getOrdersMenuList()) {
+			Menu menu = menuRepository.findById(ordersMenuDto.getMenuId()).orElseThrow(
+				() -> new IllegalArgumentException(
+					messageSource.getMessage("not.find.menu", null, Locale.getDefault())
+				)
+			);
+
+			totalPrice += menu.getPrice() * ordersMenuDto.getQuantity();
+
+			OrdersMenu ordersMenu = ordersMenuRepository.save(
+				new OrdersMenu(ordersMenuDto, savedOrders, menu, totalPrice));
+			savedOrders.setTotalPrice(totalPrice);
+			savedOrders.addOrdersMenu(ordersMenu);
+		}
 	}
 }
