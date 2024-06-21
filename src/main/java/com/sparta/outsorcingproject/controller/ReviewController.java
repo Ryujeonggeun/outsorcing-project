@@ -3,9 +3,8 @@ package com.sparta.outsorcingproject.controller;
 import com.sparta.outsorcingproject.dto.ReviewRequestDto;
 import com.sparta.outsorcingproject.dto.ReviewResponseDto;
 import com.sparta.outsorcingproject.service.ReviewService;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ public class ReviewController {
     //리뷰 등록
     //인증 인가 완성 되면 UserDetails 에서 뽑아와야함
     @PostMapping("/{ordersId}")
-    public ResponseEntity<String> addReview(@PathVariable Long ordersId, @RequestBody ReviewRequestDto requestDto ) {
+    public ResponseEntity<String> addReview(@Valid @PathVariable Long ordersId, @RequestBody ReviewRequestDto requestDto ) {
 
 
     return  reviewService.addReview(ordersId,requestDto);
