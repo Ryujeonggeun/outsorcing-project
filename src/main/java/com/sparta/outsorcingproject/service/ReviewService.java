@@ -7,6 +7,7 @@ import com.sparta.outsorcingproject.entity.Review;
 import com.sparta.outsorcingproject.entity.User;
 import com.sparta.outsorcingproject.repository.OrdersRepository;
 import com.sparta.outsorcingproject.repository.ReviewRepository;
+import com.sparta.outsorcingproject.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,9 @@ public class ReviewService {
 
     @Autowired
     OrdersRepository ordersRepository;
+
+    @Autowired
+    StoreRepository storeRepository;
 
     @Autowired
     MessageSource messageSource;
@@ -101,7 +105,22 @@ public class ReviewService {
 
     //상점 리뷰 전체 조회
     public ResponseEntity<List<ReviewResponseDto>> getStoreReviews(Long storeId) {
-        List<Review> reviews = reviewRepository.findByStoreId(storeId);
+
+        storeRepository.findStoreById(storeId,messageSource);
+
+        List<Review> reviews = reviewRepository.findAllByStore_Id(storeId);
+
+        //리뷰가 존재하는지 체크
+        if (reviews.size() == 0) {
+            throw new IllegalArgumentException(
+                    messageSource.getMessage(
+                            "not.find,review",
+                            null,
+                            Locale.getDefault()
+                    )
+            );
+        }
+
         List<ReviewResponseDto> reviewList = reviews.stream().map(ReviewResponseDto::new).toList();
         return new ResponseEntity<>(reviewList, HttpStatus.OK);
     }

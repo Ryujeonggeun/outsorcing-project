@@ -21,7 +21,9 @@ public class ReviewController {
     //리뷰 등록
     //인증 인가 완성 되면 UserDetails 에서 뽑아와야함
     @PostMapping("/{ordersId}")
-    public ResponseEntity<String> addReview(@PathVariable Long ordersId, @RequestBody ReviewRequestDto requestDto) {
+    public ResponseEntity<String> addReview(@PathVariable Long ordersId, @RequestBody ReviewRequestDto requestDto ) {
+
+
     return  reviewService.addReview(ordersId,requestDto);
     }
 
@@ -40,7 +42,7 @@ public class ReviewController {
     }
 
     //상점 리뷰 조회
-    @GetMapping("/store/{store_id}")
+    @GetMapping("/store/{storeId}")
     public ResponseEntity<List<ReviewResponseDto>> getStoreReviews(@PathVariable Long storeId) {
         return reviewService.getStoreReviews(storeId);
     }
