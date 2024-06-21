@@ -45,20 +45,10 @@ public class User extends Timestamped {
         this.role = role;
     }
 
-    public void update(ProfileModifyRequestDto requestDto) {
-
-        if (requestDto.getUsername() != null) {
-            this.username = requestDto.getUsername();
-        }
-        if (requestDto.getIntroduce() != null) {
-            this.introduce = requestDto.getIntroduce();
-        }
-        if (requestDto.getNewPassword() != null) {
-            this.password = (requestDto.getNewPassword());
-        }
+    public void update(String username,String password,String introduce) {
+            this.username = username;
+            this.password = password;
+            this.introduce = introduce;
     }
-
-
-
 
 }

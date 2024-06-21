@@ -28,6 +28,7 @@ public class ProfileService {
 
     public ResponseEntity<ProfileResponseDto> showProfile(ProfileRequestDto requestDto) {
         String requestUsername = requestDto.getUsername();
+
         User requestUser = userRepository.findByUsername(requestUsername)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 접근입니다."));
 
@@ -37,13 +38,15 @@ public class ProfileService {
     @Transactional
     public ResponseEntity<ProfileResponseDto> updateProfile(ProfileModifyRequestDto modifyRequestDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String newPW = passwordEncoder.encode(modifyRequestDto.getNewPassword());
+        String introduce = modifyRequestDto.getIntroduce();
 
-        nullCheck(modifyRequestDto);
         User authorizeUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 접근입니다."));
         writePasswordCheck(modifyRequestDto, authorizeUser);
 
-        authorizeUser.update(modifyRequestDto);
+        authorizeUser.update(username,newPW,introduce);
+        userRepository.save(authorizeUser);
         return ResponseEntity.ok(new ProfileResponseDto(authorizeUser));
     }
 
@@ -69,29 +72,6 @@ public class ProfileService {
         }
         if (newPW.equals(oldPW)) {
             throw new IllegalArgumentException("이미 사용중인 비밀번호 입니다.");
-        }
-    }
-
-    private void nullCheck(ProfileModifyRequestDto dto) {
-        boolean fieldIsNull = true;
-        try {
-            Field[] fields = dto.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                log.warn(field.getName() + " : ");
-                field.setAccessible(true);
-                Object value = field.get(dto);
-                if (value == null) {
-                    log.warn("null입니다.");
-                } else {
-                    log.warn(value.toString());
-                    fieldIsNull = false;
-                }
-            }
-        } catch (Exception e) {
-            log.warn("Null Check 중 error 발생");
-        }
-        if (fieldIsNull) {
-            throw new NoResultException("수정할 내용이 없습니다.");
         }
     }
 }
