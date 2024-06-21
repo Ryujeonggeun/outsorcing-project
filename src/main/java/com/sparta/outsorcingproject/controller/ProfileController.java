@@ -1,5 +1,6 @@
 package com.sparta.outsorcingproject.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import com.sparta.outsorcingproject.dto.ProfileModifyRequestDto;
 import com.sparta.outsorcingproject.dto.ProfileRequestDto;
@@ -21,7 +22,7 @@ public class ProfileController {
     }
 
     @PutMapping("/profile/update")
-    public ResponseEntity<ProfileResponseDto> updateProfile(@RequestBody ProfileModifyRequestDto modifyRequestDto) {
+    public ResponseEntity<ProfileResponseDto> updateProfile(@RequestBody @Valid ProfileModifyRequestDto modifyRequestDto) {
         return profileService.updateProfile(modifyRequestDto);
     }
 }

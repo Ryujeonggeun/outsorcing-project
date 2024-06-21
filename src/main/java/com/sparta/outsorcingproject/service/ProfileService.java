@@ -27,9 +27,9 @@ public class ProfileService {
     private final PasswordEncoder passwordEncoder;
 
     public ResponseEntity<ProfileResponseDto> showProfile(ProfileRequestDto requestDto) {
-        String requestUsername = requestDto.getUsername();
+        String username = requestDto.getUsername();
 
-        User requestUser = userRepository.findByUsername(requestUsername)
+        User requestUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 접근입니다."));
 
         return ResponseEntity.ok(new ProfileResponseDto(requestUser));
