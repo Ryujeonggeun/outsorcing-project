@@ -1,5 +1,6 @@
 package com.sparta.outsorcingproject.controller;
 
+import com.sparta.outsorcingproject.dto.AdminSignupRequestDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +27,12 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
+    @PostMapping("/user/admin")
+    public String adminSignup(@RequestBody @Valid AdminSignupRequestDto requestDto) {
+        userService.adminSignup(requestDto);
+
+        return "관리자 회원가입 완료";
+    }
 
     @PostMapping("/user/signup")
     public String signup(@RequestBody @Valid SignupRequestDto requestDto) {

@@ -1,5 +1,6 @@
 package com.sparta.outsorcingproject.service;
 
+import com.sparta.outsorcingproject.dto.AdminSignupRequestDto;
 import com.sparta.outsorcingproject.entity.UserRoleEnum;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,11 +31,12 @@ public class UserService {
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public void signup(SignupRequestDto requestDto) {
+
+    //admin 회원가입
+    public void adminSignup(AdminSignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String introduce = requestDto.getIntroduce();
         String password = passwordEncoder.encode(requestDto.getPassword());
-
 
         // 회원 중복 확인
 
@@ -57,6 +59,40 @@ public class UserService {
         userRepository.save(user);
     }
 
+
+
+
+
+    //user 회원가입
+    public void signup(SignupRequestDto requestDto) {
+        String username = requestDto.getUsername();
+        String introduce = requestDto.getIntroduce();
+        String password = passwordEncoder.encode(requestDto.getPassword());
+
+
+        // 회원 중복 확인
+
+        Optional<User> checkUsername = userRepository.findByUsername(username);
+        if (checkUsername.isPresent()) {
+            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+        }
+
+        // 사용자 ROLE 확인
+        UserRoleEnum role = UserRoleEnum.USER;
+//        if (requestDto.isAdmin()) {
+//            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
+//                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+//            }
+//            role = UserRoleEnum.ADMIN;
+//        }
+
+        // 사용자 등록
+        User user = new User(username, password, introduce, role);
+        userRepository.save(user);
+    }
+
+
+    //계정 삭제
     @Transactional
     public void deleteById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
@@ -65,6 +101,9 @@ public class UserService {
 
         userRepository.deleteById(id);
     }
+
+
+
 
     public void login(LoginRequestDto requestDto, HttpServletResponse res) {
         String username = requestDto.getUsername();
