@@ -4,9 +4,7 @@ import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,11 +18,17 @@ public class AdminController {
     //유저 전체 조회
     @GetMapping("/users")
     public ResponseEntity<List<UserResponseDto>> getAllUsers(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return null;
+        List<UserResponseDto> allUsers = adminService.getAllUsers();
+        return ResponseEntity.ok(allUsers);
     }
 
     //사용자 권한 수정 삭제
+    @PutMapping("/user/{userId}/role")
+    public ResponseEntity<String> updateUserRole(@PathVariable Long userId, @RequestParam String role,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
+        return ResponseEntity.ok("권한 수정 되었습니다");
+    }
 
     //메뉴 전체 조회
 
