@@ -36,31 +36,53 @@ public class OrdersService {
 
 		Store store = storeRepository.findById(storeId).orElseThrow(
 			() -> new IllegalStateException(
-				messageSource.getMessage("not.found.store", null, Locale.getDefault())
+				messageSource.getMessage("not.find.store", null, Locale.getDefault())
 			)
 		);
 
 		Orders orders = new Orders(user, store);
 		Orders savedOrders = ordersRepository.save(orders);
 
+		ordersMenuConvert(requestDto, savedOrders);
+
+		return new OrdersResponseDto(savedOrders);
+	}
+
+	@Transactional
+	public OrdersResponseDto editOrders(User user, long ordersId, OrdersRequestDto requestDto) {
+		Orders orders = ordersRepository.findById(ordersId).orElseThrow(
+			() -> new IllegalStateException(
+				messageSource.getMessage("not.find.orders", null, Locale.getDefault())
+			)
+		);
+
+		if (!orders.getUser().equals(user)) {
+			throw new IllegalStateException(
+				messageSource.getMessage("mismatch.user", null, Locale.getDefault())
+			);
+		}
+
+		ordersMenuConvert(requestDto, orders);
+
+		return new OrdersResponseDto(orders);
+	}
+
+	private void ordersMenuConvert(OrdersRequestDto requestDto, Orders savedOrders) {
 		long totalPrice = 0;
 
 		for (OrdersMenuRequestDto ordersMenuDto : requestDto.getOrdersMenuList()) {
 			Menu menu = menuRepository.findById(ordersMenuDto.getMenuId()).orElseThrow(
 				() -> new IllegalStateException(
-					messageSource.getMessage("not.found.menu", null, Locale.getDefault())
+					messageSource.getMessage("not.find.menu", null, Locale.getDefault())
 				)
 			);
 
-			totalPrice += menu.getPrice()*ordersMenuDto.getQuantity();
+			totalPrice += menu.getPrice() * ordersMenuDto.getQuantity();
 
 			OrdersMenu ordersMenu = ordersMenuRepository.save(
 				new OrdersMenu(ordersMenuDto, savedOrders, menu, totalPrice));
 			savedOrders.setTotalPrice(totalPrice);
 			savedOrders.addOrdersMenu(ordersMenu);
 		}
-
-
-		return new OrdersResponseDto(savedOrders);
 	}
 }
