@@ -66,6 +66,8 @@ public class OrdersService {
 			);
 		}
 
+		orders.getOrdersMenu().clear();
+
 		ordersMenuConvert(requestDto, orders);
 
 		return new OrdersResponseDto(orders);

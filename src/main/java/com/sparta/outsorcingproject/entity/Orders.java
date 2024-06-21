@@ -45,7 +45,6 @@ public class Orders extends Timestamped {
 	}
 
 	public void addOrdersMenu(OrdersMenu ordersMenu) {
-		this.ordersMenu.clear();
 		this.ordersMenu.add(ordersMenu);
 		ordersMenu.addOrders(this);
 	}
