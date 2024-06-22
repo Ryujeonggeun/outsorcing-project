@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader("RefreshToken", refreshToken);
 
         // JSON 형식으로 로그인 성공 메시지 작성
-        String loginSuccessMessage = String.format("{\"message\": \"로그인 완료\", \"accessToken\": \"%s\", \"refreshToken\": \"%s\"}", accessToken, refreshToken);
+        String loginSuccessMessage = String.format("{\"message\": \"로그인 완료\", \"accessToken\": \"%s\", \"refreshToken\": \"%s\"} ㅣ,", accessToken, refreshToken);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
