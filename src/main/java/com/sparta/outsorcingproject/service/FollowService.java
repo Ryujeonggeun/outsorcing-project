@@ -31,7 +31,6 @@ public class FollowService {
 			);
 		}
 
-
 		User follower = userRepository.findById(followerId).orElseThrow(
 			() -> new IllegalArgumentException(
 				messageSource.getMessage("not.find.user", null, Locale.getDefault())
@@ -54,5 +53,28 @@ public class FollowService {
 
 		return new FollowResponseDto(savedFollower);
 
+	}
+
+	public void unfollow(long followerId, long meId) {
+
+		User follower = userRepository.findById(followerId).orElseThrow(
+			() -> new IllegalArgumentException(
+				messageSource.getMessage("not.find.user", null, Locale.getDefault())
+			)
+		);
+
+		User meUser = userRepository.findById(meId).orElseThrow(
+			() -> new IllegalArgumentException(
+				messageSource.getMessage("not.find.user", null, Locale.getDefault())
+			)
+		);
+
+		Follower findFollower = followRepository.findByFollowerAndMe(follower, meUser).orElseThrow(
+			() -> new IllegalArgumentException(
+				messageSource.getMessage("not.find.follow", null, Locale.getDefault())
+			)
+		);
+
+		followRepository.delete(findFollower);
 	}
 }
