@@ -55,12 +55,6 @@ public class ProfileService {
         String oldPW = modifyRequestDto.getOldPassword();
         String originalPW = user.getPassword();
 
-        if (newPW != null && oldPW == null) {
-            throw new IllegalArgumentException("현재 비밀번호를 입력하지 않으셨습니다.");
-        }
-        if (newPW == null && oldPW != null) {
-            throw new IllegalArgumentException("새 비밀번호를 입력하지 않으셨습니다.");
-        }
         if (newPW != null && oldPW != null) {
             passwordCheck(newPW, oldPW, originalPW);
         }
