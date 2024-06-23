@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/follows")
 public class FollowerController {
 
-	public static final String SUCCESSFULLY_UNFOLLOWED = "삭제를 완료했습니다.";
+	public static final String SUCCESSFULLY_UNFOLLOWED = "언팔로우 되었습니다.";
 	private final FollowService followService;
 
 	@PostMapping("/{followerId}")
