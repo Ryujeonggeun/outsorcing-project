@@ -68,7 +68,18 @@ public class AdminController {
 
 
     //메뉴수정
+    @PutMapping("/{storeId}/menu/{menuId}")
+    public ResponseEntity<String> updateMenu(@PathVariable long storeId, @PathVariable long menuId, @RequestBody MenuRequestDto requestDto) {
+        String response = adminService.updateMenu(storeId,menuId,requestDto);
+
+        return ResponseEntity.ok().body(response);
+    }
 
     //메뉴 삭제
+    @DeleteMapping("/{storeId}/menu/{menuId}")
+    public ResponseEntity<String> deleteMenu(@PathVariable long storeId, @PathVariable long menuId) {
+        String response = adminService.deleteMenu(storeId,menuId);
 
+        return ResponseEntity.ok().body(response);
+    }
 }

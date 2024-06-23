@@ -102,4 +102,34 @@ public class AdminService {
 
         return "메뉴 생성 성공";
     }
+
+    @Transactional
+    public String updateMenu(long storeId, long menuId, MenuRequestDto requestDto) {
+        storeRepository.findStoreById(storeId,messageSource);
+
+        Menu menu = menuRepository.findMenuById(menuId,messageSource);
+
+        if(menu.getStore().getId() != storeId){
+            throw new IllegalArgumentException("("+menu.getStore().getStoreName() +") 에서 가지고 있는 메뉴가 아닙니다.");
+        }
+
+        menu.update(requestDto);
+
+        return "메뉴 업데이트 완료";
+    }
+
+    public String deleteMenu(long storeId, long menuId) {
+        storeRepository.findStoreById(storeId,messageSource);
+
+        Menu menu = menuRepository.findMenuById(menuId,messageSource);
+
+        if(menu.getStore().getId() != storeId){
+            throw new IllegalArgumentException("("+menu.getStore().getStoreName() +") 에서 가지고 있는 메뉴가 아닙니다.");
+        }
+
+        String str = menu.getName() + " 메뉴 삭제 완료";
+        menuRepository.delete(menu);
+        return str;
+
+    }
 }
