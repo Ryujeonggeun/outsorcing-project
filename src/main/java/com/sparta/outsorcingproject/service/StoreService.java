@@ -30,9 +30,7 @@ public class StoreService {
 
     private final UserService userService;
 
-    public ResponseEntity<String> createStore(
-            User user,
-            @Valid StoreRequestDto requestDto) {
+    public ResponseEntity<String> createStore(User user, StoreRequestDto requestDto) {
 
         User findUser = userService.getUserByUsername(user.getUsername());
 

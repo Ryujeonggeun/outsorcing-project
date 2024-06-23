@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "store")
-public class Store {
+public class Store extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,22 +41,37 @@ public class Store {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column
+    private Long likeCount;
+
     @OneToMany(mappedBy = "store",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> Menus = new ArrayList<>();
 
     @OneToMany(mappedBy = "store",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
+    
+    // 생성
     public Store(User user, StoreRequestDto requestDto) {
         this.user = user;
         this.sellerName = user.getUsername();
         this.storeName = requestDto.getStoreName();
         this.storeIntroducing = requestDto.getStoreIntroducing();
+        this.likeCount = 0L;
     }
 
-
+    // 수정
     public void update(StoreRequestDto requestDto) {
         this.storeName = requestDto.getStoreName();
         this.storeIntroducing = requestDto.getStoreIntroducing();
+    }
+
+    // 좋아요 갱신
+    public void addCount(){
+        this.likeCount++;
+    }
+
+    public void subtractCount(){
+        this.likeCount--;
     }
 }
