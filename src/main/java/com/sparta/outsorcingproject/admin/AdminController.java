@@ -1,11 +1,13 @@
 package com.sparta.outsorcingproject.admin;
 
+import com.sparta.outsorcingproject.dto.MenuRequestDto;
 import com.sparta.outsorcingproject.dto.MenuResponseDto;
 import com.sparta.outsorcingproject.dto.OrdersResponseDto;
 import com.sparta.outsorcingproject.dto.ReviewResponseDto;
 import com.sparta.outsorcingproject.entity.Review;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,7 @@ public class AdminController {
     public ResponseEntity<String> updateUserRole(@PathVariable Long userId, @RequestParam String newRole,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        adminService.updateUserRole(userId,newRole,userDetails.getUser());
+        adminService.updateUserRole(userId, newRole, userDetails.getUser());
         return ResponseEntity.ok(userId + "유저의 권한이 " + newRole + " 으로 수정되었습니다.");
     }
 
@@ -57,6 +59,13 @@ public class AdminController {
     }
 
     //메뉴 생성
+    @PostMapping("/{storeId}/menu")
+    public ResponseEntity<String> createMenu(@PathVariable long storeId, @RequestBody MenuRequestDto requestDto) {
+        String response = adminService.createMenu(storeId, requestDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
 
     //메뉴수정
 

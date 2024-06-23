@@ -1,15 +1,12 @@
 package com.sparta.outsorcingproject.admin;
 
+import com.sparta.outsorcingproject.dto.MenuRequestDto;
 import com.sparta.outsorcingproject.dto.MenuResponseDto;
 import com.sparta.outsorcingproject.dto.OrdersResponseDto;
 import com.sparta.outsorcingproject.dto.ReviewResponseDto;
-import com.sparta.outsorcingproject.entity.Review;
-import com.sparta.outsorcingproject.entity.User;
-import com.sparta.outsorcingproject.entity.UserRoleEnum;
-import com.sparta.outsorcingproject.repository.MenuRepository;
-import com.sparta.outsorcingproject.repository.OrdersRepository;
-import com.sparta.outsorcingproject.repository.ReviewRepository;
-import com.sparta.outsorcingproject.repository.UserRepository;
+import com.sparta.outsorcingproject.entity.*;
+import com.sparta.outsorcingproject.repository.*;
+import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,8 @@ public class AdminService {
     OrdersRepository ordersRepository;
     @Autowired
     ReviewRepository reviewRepository;
+    @Autowired
+    StoreRepository storeRepository;
 
 
     public List<UserResponseDto> getAllUsers() {
@@ -88,5 +87,19 @@ public class AdminService {
     public List<ReviewResponseDto> getAllReviews() {
         return reviewRepository.findAll().stream()
                 .map(ReviewResponseDto::new).toList();
+    }
+
+    public String createMenu(long storeId, MenuRequestDto requestDto) {
+        Store store = storeRepository.findStoreById(storeId,messageSource);
+
+        Menu menu = Menu.builder()
+                .name(requestDto.getName())
+                .price(requestDto.getPrice())
+                .description(requestDto.getDescription())
+                .store(store)
+                .build();
+        menuRepository.save(menu);
+
+        return "메뉴 생성 성공";
     }
 }
