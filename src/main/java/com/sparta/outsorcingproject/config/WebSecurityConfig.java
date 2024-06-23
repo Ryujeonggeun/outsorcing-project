@@ -1,5 +1,6 @@
 package com.sparta.outsorcingproject.config;
 
+import com.sparta.outsorcingproject.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import com.sparta.outsorcingproject.security.UserDetailsServiceImpl;
 import com.sparta.outsorcingproject.jwt.JwtAuthenticationFilter;
@@ -65,12 +66,14 @@ public class WebSecurityConfig {
                         .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
                         .requestMatchers("/user/signup").permitAll() // 회원가입 요청 허가
                         .requestMatchers("/user/login").permitAll() // 로그인 요청 허가
+                        .requestMatchers("/user/admin").permitAll() // 어드민 회원가입 허가
                         .requestMatchers("/user/**").authenticated() // '/user/'로 시작하는 요청 인증 필요
+                        .requestMatchers("/admin/**").hasAuthority(UserRoleEnum.ADMIN.getAuthority()) //권한이 Admin 인 유저만 접근가능
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
         // 필터 관리
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
