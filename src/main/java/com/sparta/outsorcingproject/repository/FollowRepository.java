@@ -11,6 +11,4 @@ import com.sparta.outsorcingproject.entity.User;
 public interface FollowRepository extends JpaRepository<Follower, FollowerId> {
 	Optional<Follower> findByFollower(User follower);
 	Optional<Follower> findByFollowerAndMe(User follower, User me);
-
-	void deleteByFollowerAndMe(User follower, User meUser);
 }
