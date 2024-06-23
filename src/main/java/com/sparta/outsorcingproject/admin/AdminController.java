@@ -2,6 +2,8 @@ package com.sparta.outsorcingproject.admin;
 
 import com.sparta.outsorcingproject.dto.MenuResponseDto;
 import com.sparta.outsorcingproject.dto.OrdersResponseDto;
+import com.sparta.outsorcingproject.dto.ReviewResponseDto;
+import com.sparta.outsorcingproject.entity.Review;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +50,11 @@ public class AdminController {
     }
 
     //리뷰 전체 조회
+    @GetMapping("/reviews")
+    public ResponseEntity<List<ReviewResponseDto>> getAllReviews() {
+        List<ReviewResponseDto> allReview = adminService.getAllReviews();
+        return ResponseEntity.ok(allReview);
+    }
 
     //메뉴 생성
 

@@ -2,10 +2,13 @@ package com.sparta.outsorcingproject.admin;
 
 import com.sparta.outsorcingproject.dto.MenuResponseDto;
 import com.sparta.outsorcingproject.dto.OrdersResponseDto;
+import com.sparta.outsorcingproject.dto.ReviewResponseDto;
+import com.sparta.outsorcingproject.entity.Review;
 import com.sparta.outsorcingproject.entity.User;
 import com.sparta.outsorcingproject.entity.UserRoleEnum;
 import com.sparta.outsorcingproject.repository.MenuRepository;
 import com.sparta.outsorcingproject.repository.OrdersRepository;
+import com.sparta.outsorcingproject.repository.ReviewRepository;
 import com.sparta.outsorcingproject.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,8 @@ public class AdminService {
     MenuRepository menuRepository;
     @Autowired
     OrdersRepository ordersRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
 
 
     public List<UserResponseDto> getAllUsers() {
@@ -40,7 +45,7 @@ public class AdminService {
     public void updateUserRole(Long userId, String newRole, User user) {
 
         //대문자로 변경
-       newRole = newRole.toUpperCase();
+        newRole = newRole.toUpperCase();
 
         // ADMIN/User 둘 중 하나로 들어왔는지 체크
         if (!("USER".equals(newRole) | "ADMIN".equals(newRole))) {
@@ -59,14 +64,14 @@ public class AdminService {
 
         // 바꾸려는 권한이 원래 있던 권한가 같으면 예외 처리
         if (newRole.equals(getUser.getRole().getAuthority())) {
-        throw new IllegalArgumentException("바꾸려는 유저의 권한은이미 " + newRole + "입니다");
+            throw new IllegalArgumentException("바꾸려는 유저의 권한은이미 " + newRole + "입니다");
         }
 
         //변경후 누가 변경했는지 로그 찍기
         UserRoleEnum userRoleEnum = UserRoleEnum.valueOf(newRole.substring(5));
         getUser.setRole(userRoleEnum);
-        log.info(user.getUsername() + "가 UserId: " + userId + " 의 권한을 " + newRole + " 로 변경하였습니다." );
-        }
+        log.info(user.getUsername() + "가 UserId: " + userId + " 의 권한을 " + newRole + " 로 변경하였습니다.");
+    }
 
     public List<MenuResponseDto> getAllMemus() {
         return menuRepository.findAll().stream()
@@ -78,5 +83,10 @@ public class AdminService {
         return ordersRepository.findAll().stream()
                 .map(OrdersResponseDto::new).toList();
 
+    }
+
+    public List<ReviewResponseDto> getAllReviews() {
+        return reviewRepository.findAll().stream()
+                .map(ReviewResponseDto::new).toList();
     }
 }
