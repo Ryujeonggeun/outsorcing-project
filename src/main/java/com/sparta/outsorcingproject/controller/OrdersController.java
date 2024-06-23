@@ -49,12 +49,21 @@ public class OrdersController {
 	@GetMapping
 	public ResponseEntity<List<OrdersResponseDto>> getOrders(
 		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "5") int size
-	) {
+		@RequestParam(defaultValue = "5") int size) {
 
 		List<OrdersResponseDto> responseDtoList = ordersService.findAll(page, size);
 
 		return ResponseEntity.ok().body(responseDtoList);
+	}
+
+	@GetMapping("/follow/{followerId}")
+	public ResponseEntity<List<OrdersResponseDto>> getFollowedOrders(
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@PathVariable long followerId) {
+
+		List<OrdersResponseDto> allByFollow = ordersService.findAllByFollow(userDetails.getUser(), followerId);
+
+		return ResponseEntity.ok().body(allByFollow);
 	}
 
 	@GetMapping("/{ordersId}")
