@@ -6,6 +6,7 @@ import com.sparta.outsorcingproject.dto.OrdersResponseDto;
 import com.sparta.outsorcingproject.dto.ReviewResponseDto;
 import com.sparta.outsorcingproject.entity.Review;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,25 @@ public class AdminController {
         adminService.updateUserRole(userId, newRole, userDetails.getUser());
         return ResponseEntity.ok(userId + "유저의 권한이 " + newRole + " 으로 수정되었습니다.");
     }
+
+    //특정 회원 정보 수정
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<String> updateUser(@PathVariable Long userId, @Valid @RequestBody UpdateUserRequestDto requestDto,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        adminService.updateUser(userId,requestDto);
+        return ResponseEntity.ok(userDetails.getUser().getUsername() + " 님에의해 " + userId + "번 회원님의 정보가 수정되었습니다");
+
+    }
+
+    //특정 회원 삭제
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        adminService.deleteUser(userId);
+        return ResponseEntity.ok(userDetails.getUser().getUsername() + " 님에의해 " + userId + "번 회원님이 삭제되었습니다.");
+    }
+
+    //특정 회원 차단
 
     //메뉴 전체 조회
     @GetMapping("/menus")

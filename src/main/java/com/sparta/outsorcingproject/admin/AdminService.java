@@ -6,11 +6,12 @@ import com.sparta.outsorcingproject.dto.OrdersResponseDto;
 import com.sparta.outsorcingproject.dto.ReviewResponseDto;
 import com.sparta.outsorcingproject.entity.*;
 import com.sparta.outsorcingproject.repository.*;
-import com.sparta.outsorcingproject.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,8 @@ public class AdminService {
     ReviewRepository reviewRepository;
     @Autowired
     StoreRepository storeRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     public List<UserResponseDto> getAllUsers() {
@@ -131,5 +134,38 @@ public class AdminService {
         menuRepository.delete(menu);
         return str;
 
+    }
+
+    @Transactional
+    public void updateUser(Long userId, @Valid UpdateUserRequestDto requestDto) {
+
+        //유저찾기
+        User getUser = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException(
+                        messageSource.getMessage("not.find.user", null, Locale.getDefault())
+                )
+        );
+
+        //바꾸려는 아이디가 동일하면 예외처리
+        if (getUser.getUsername().equals(requestDto.getUsername())) {
+            throw new IllegalArgumentException(messageSource.getMessage("duplication.user",null,Locale.getDefault()));
+        }
+
+        String password = passwordEncoder.encode(requestDto.getPassword());
+
+
+        getUser.setUsername(requestDto.getUsername());
+        getUser.setPassword(password);
+        getUser.setIntroduce(requestDto.getIntroduce());
+    }
+
+    public void deleteUser(Long userId) {
+        //유저찾기
+        User getUser = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException(
+                        messageSource.getMessage("not.find.user", null, Locale.getDefault())
+                )
+        );
+        userRepository.delete(getUser);
     }
 }
