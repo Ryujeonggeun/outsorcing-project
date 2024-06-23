@@ -1,5 +1,6 @@
 package com.sparta.outsorcingproject.admin;
 
+import com.sparta.outsorcingproject.dto.MenuResponseDto;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,8 @@ public class AdminController {
     //유저 전체 조회
     @GetMapping("/users")
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        List<UserResponseDto> allUsers = adminService.getAllUsers();
-        return ResponseEntity.ok(allUsers);
+        List<UserResponseDto> allUser = adminService.getAllUsers();
+        return ResponseEntity.ok(allUser);
     }
 
     //사용자 권한 수정 삭제
@@ -32,6 +33,11 @@ public class AdminController {
     }
 
     //메뉴 전체 조회
+    @GetMapping("/menus")
+    public ResponseEntity<List<MenuResponseDto>> getAllMenus() {
+        List<MenuResponseDto> allMenu = adminService.getAllMemus();
+        return ResponseEntity.ok(allMenu);
+    }
 
     //주문 전체 조회
 
