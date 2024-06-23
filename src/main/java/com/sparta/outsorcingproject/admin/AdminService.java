@@ -1,9 +1,11 @@
 package com.sparta.outsorcingproject.admin;
 
 import com.sparta.outsorcingproject.dto.MenuResponseDto;
+import com.sparta.outsorcingproject.dto.OrdersResponseDto;
 import com.sparta.outsorcingproject.entity.User;
 import com.sparta.outsorcingproject.entity.UserRoleEnum;
 import com.sparta.outsorcingproject.repository.MenuRepository;
+import com.sparta.outsorcingproject.repository.OrdersRepository;
 import com.sparta.outsorcingproject.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +23,13 @@ public class AdminService {
     private static final Logger log = LoggerFactory.getLogger(AdminService.class);
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     MessageSource messageSource;
-
     @Autowired
     MenuRepository menuRepository;
+    @Autowired
+    OrdersRepository ordersRepository;
+
 
     public List<UserResponseDto> getAllUsers() {
         return userRepository.findAll().stream()
@@ -68,6 +71,12 @@ public class AdminService {
     public List<MenuResponseDto> getAllMemus() {
         return menuRepository.findAll().stream()
                 .map(MenuResponseDto::new).toList();
+
+    }
+
+    public List<OrdersResponseDto> getAllOrders() {
+        return ordersRepository.findAll().stream()
+                .map(OrdersResponseDto::new).toList();
 
     }
 }

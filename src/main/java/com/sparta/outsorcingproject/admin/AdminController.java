@@ -1,6 +1,7 @@
 package com.sparta.outsorcingproject.admin;
 
 import com.sparta.outsorcingproject.dto.MenuResponseDto;
+import com.sparta.outsorcingproject.dto.OrdersResponseDto;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,11 @@ public class AdminController {
     }
 
     //주문 전체 조회
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrdersResponseDto>> getAllOrders() {
+        List<OrdersResponseDto> allOder = adminService.getAllOrders();
+        return ResponseEntity.ok(allOder);
+    }
 
     //리뷰 전체 조회
 
