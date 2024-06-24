@@ -36,7 +36,8 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private UserRoleEnum role;
 
-
+    @Column
+    private String profileUrl;
 
     public User(String username, String password, String introduce, UserRoleEnum role) {
         this.username = username;
@@ -49,6 +50,10 @@ public class User extends Timestamped {
             this.username = username;
             this.password = password;
             this.introduce = introduce;
+    }
+
+    public void updateProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 
 }

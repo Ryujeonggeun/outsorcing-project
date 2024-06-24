@@ -10,9 +10,11 @@ public class ProfileResponseDto {
     
     private String username;
     private String introduce;
+    private String profileUrl;
 
     public ProfileResponseDto(User user) {
         this.username = user.getUsername();
         this.introduce = user.getIntroduce();
+        this.profileUrl = user.getProfileUrl();
     }
 }
