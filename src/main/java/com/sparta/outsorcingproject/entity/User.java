@@ -43,6 +43,9 @@ public class User extends Timestamped {
 
 	private Long kakaoId;
 
+    @Column
+    private String profileUrl;
+
 	public User(String username, String password, String introduce, UserRoleEnum role) {
 		this.username = username;
 		this.password = password;
@@ -67,4 +70,8 @@ public class User extends Timestamped {
 		this.kakaoId = kakaoId;
 		return this;
 	}
+    public void updateProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
 }
