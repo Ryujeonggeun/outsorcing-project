@@ -103,13 +103,12 @@ public class UserController {
 	@GetMapping("/kakao")
 	public ResponseEntity<String> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
 
-		String token = kakaoService.kakaoLogin(code);
+		String token = kakaoService.kakaoLogin(code).substring(7);
 
 		Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
 		cookie.setPath("/");
 		response.addCookie(cookie);
 
 		return ResponseEntity.ok().body("token " + token);
-
 	}
 }
