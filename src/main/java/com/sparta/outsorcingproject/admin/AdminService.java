@@ -120,7 +120,7 @@ public class AdminService {
 
         return "메뉴 업데이트 완료";
     }
-
+    @Transactional
     public String deleteMenu(long storeId, long menuId) {
         storeRepository.findStoreById(storeId,messageSource);
 
@@ -167,5 +167,17 @@ public class AdminService {
                 )
         );
         userRepository.delete(getUser);
+    }
+    @Transactional
+    public void blockUser(Long userId) {
+        //유저찾기
+        User getUser = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException(
+                        messageSource.getMessage("not.find.user", null, Locale.getDefault())
+                )
+        );
+        //유저 Role 바꾸기
+        getUser.setRole(UserRoleEnum.BLOCK);
+
     }
 }

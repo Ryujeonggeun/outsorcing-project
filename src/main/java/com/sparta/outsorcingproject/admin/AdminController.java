@@ -56,6 +56,11 @@ public class AdminController {
     }
 
     //특정 회원 차단
+    @PutMapping("/user/block/{userId}")
+    public ResponseEntity<String> blockUser(@PathVariable Long userId,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        adminService.blockUser(userId);
+        return ResponseEntity.ok(userDetails.getUser().getUsername() + " 님에의해 " + userId + "번 회원님이 차단되었습니다.");
+    }
 
     //메뉴 전체 조회
     @GetMapping("/menus")
@@ -98,8 +103,8 @@ public class AdminController {
     //메뉴 삭제
     @DeleteMapping("/{storeId}/menu/{menuId}")
     public ResponseEntity<String> deleteMenu(@PathVariable long storeId, @PathVariable long menuId) {
-        String response = adminService.deleteMenu(storeId,menuId);
+        String str = adminService.deleteMenu(storeId,menuId);
 
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(str);
     }
 }
