@@ -1,6 +1,5 @@
 package com.sparta.outsorcingproject.like;
 
-import com.sparta.outsorcingproject.store.Store;
 import com.sparta.outsorcingproject.entity.Timestamped;
 import com.sparta.outsorcingproject.user.User;
 import jakarta.persistence.*;
@@ -37,6 +36,3 @@ public class Like extends Timestamped {
     }
 }
 
-enum LikeContentType{
-    REVIEW,STORE
-}

@@ -75,4 +75,9 @@ public class Store extends Timestamped {
     public void subtractCount(){
         this.likeCount--;
     }
+
+    public void setLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
+    }
+
 }

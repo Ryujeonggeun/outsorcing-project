@@ -25,6 +25,9 @@ public class Review extends Timestamped {
     @JoinColumn(name = "orders_id")
     private Orders orders;
 
+    @Column
+    private Long likeCount;
+
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
@@ -39,6 +42,7 @@ public class Review extends Timestamped {
         this.store = store;
         this.review = review;
         this.rate = rate;
+        this.likeCount = 0L;
     }
 
     public void updateReview(String review, Double rate) {
@@ -46,4 +50,15 @@ public class Review extends Timestamped {
         this.rate = rate;
     }
 
+    public void addCount(){
+        this.likeCount++;
+    }
+
+    public void subtractCount(){
+        this.likeCount--;
+    }
+
+    public void setLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
+    }
 }
