@@ -7,15 +7,19 @@ import com.sparta.outsorcingproject.store.Store;
 import com.sparta.outsorcingproject.store.StoreResponseDto;
 import com.sparta.outsorcingproject.user.User;
 import com.sparta.outsorcingproject.store.StoreRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -111,39 +115,58 @@ public class LikeService {
     }
 
     // 좋아요한 상점 리스트
-    public List<StoreResponseDto> likesStoreList(User user) {
+    public Page<StoreResponseDto> likesStoreList(User user, int page) {
+        //페이지네이션 및 정렬
+        Pageable pageable =  PageRequest.of(page,5, Sort.by(Sort.Direction.DESC, "createdAt"));
         //유저가 좋아요한 상점이 있는지 확인
-        List<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.STORE);
+        Page<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.STORE,pageable);
         if (likes.isEmpty()) {
         throw new IllegalArgumentException("좋아요한 상점이 없습니다.");
         }
 
-        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
-        List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
-        for (Like like : likes) {
+        Page<StoreResponseDto> likeStoreList = likes.map(like -> {
             Store store = storeRepository.findStoreById(like.getContentId(), messageSource);
-            StoreResponseDto storeResponseDto = new StoreResponseDto(store);
-            storeResponseDtoList.add(storeResponseDto);
-        }
+            return new StoreResponseDto(store);
+        });
 
-        return storeResponseDtoList;
+//        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
+//        List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
+//        for (Like like : likes) {
+//            Store store = storeRepository.findStoreById(like.getContentId(), messageSource);
+//            StoreResponseDto storeResponseDto = new StoreResponseDto(store);
+//            storeResponseDtoList.add(storeResponseDto);
+//        }
+//        //  List<StoreResponseDto> -> Page 객체로 변환해서 반환
+
+        return likeStoreList;
     }
 
     //좋아요한 리뷰 리스트
-    public List<ReviewResponseDto> likereviewList(User user) {
+    public Page<ReviewResponseDto> likereviewList(User user, int page) {
+
+        //페이지네이션 및 정렬
+
+        Pageable pageable = PageRequest.of(page,5, Sort.by(Sort.Direction.DESC, "createdAt"));
         //유저가 좋아요한 리뷰가 있는지
-        List<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.REVIEW);
+        Page<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.REVIEW,pageable);
         if (likes.isEmpty()) {
             throw new IllegalArgumentException("좋아요한 리뷰가 없습니다.");
         }
-        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
-        List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
-        for (Like like : likes) {
+
+        Page<ReviewResponseDto> likeReviewList = likes.map(like -> {
             Review review = reviewRepository.findReviewById(like.getContentId(), messageSource);
-            ReviewResponseDto reviewResponseDto = new ReviewResponseDto(review);
-            reviewResponseDtoList.add(reviewResponseDto);
-        }
-        return reviewResponseDtoList;
+            return new ReviewResponseDto(review);
+        });
+
+
+        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
+//        Page<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
+//        for (Like like : likes) {
+//            Review review = reviewRepository.findReviewById(like.getContentId(), messageSource);
+//            ReviewResponseDto reviewResponseDto = new ReviewResponseDto(review);
+//            reviewResponseDtoList.add(reviewResponseDto);
+//        }
+        return likeReviewList;
     }
 
     // 좋아요 리로딩
