@@ -3,14 +3,17 @@ package com.sparta.outsorcingproject.like;
 import com.sparta.outsorcingproject.review.Review;
 import com.sparta.outsorcingproject.review.ReviewRepository;
 import com.sparta.outsorcingproject.store.Store;
+import com.sparta.outsorcingproject.store.StoreResponseDto;
 import com.sparta.outsorcingproject.user.User;
 import com.sparta.outsorcingproject.store.StoreRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -107,7 +110,24 @@ public class LikeService {
         return ResponseEntity.ok(message);
     }
 
+    // 좋아요한 상점 리스트
+    public List<StoreResponseDto> likesStoreList(User user) {
+        //유저가 좋아요한 상점이 있는지 확인
+        List<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.STORE);
 
+        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
+        List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
+        for (Like like : likes) {
+            Store store = storeRepository.findStoreById(like.getContentId(), messageSource);
+            StoreResponseDto storeResponseDto = new StoreResponseDto(store);
+            storeResponseDtoList.add(storeResponseDto);
+        }
+
+        if (storeResponseDtoList.isEmpty()) {
+            throw new IllegalArgumentException("좋아요 한 상점이 없습니다.");
+        }
+        return storeResponseDtoList;
+    }
 
 
 
@@ -131,8 +151,4 @@ public class LikeService {
 
 
 
-//    // 좋아요 타입별로 조회
-//    public ResponseEntity<LikeResponseByContentType> getLikesBYContent() {
-//
-//    }
 }

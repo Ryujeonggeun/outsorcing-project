@@ -5,6 +5,7 @@ import com.sparta.outsorcingproject.user.User;
 import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Locale;
 
 public interface LikeRepository extends JpaRepository<Like,Long> {
@@ -19,4 +20,6 @@ public interface LikeRepository extends JpaRepository<Like,Long> {
     default Like findLikeById(Long likeId, MessageSource messageSource){
         return findById(likeId).orElseThrow(()->new IllegalArgumentException(messageSource.getMessage("not.find.like",null, Locale.getDefault())));
     }
+
+    List<Like> findByUserAndContentType(User user, LikeContentType likeContentType);
 }
