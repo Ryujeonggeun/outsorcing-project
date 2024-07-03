@@ -1,8 +1,8 @@
 package com.sparta.outsorcingproject.security;
 
 import lombok.RequiredArgsConstructor;
-import com.sparta.outsorcingproject.entity.User;
-import com.sparta.outsorcingproject.repository.UserRepository;
+import com.sparta.outsorcingproject.user.User;
+import com.sparta.outsorcingproject.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

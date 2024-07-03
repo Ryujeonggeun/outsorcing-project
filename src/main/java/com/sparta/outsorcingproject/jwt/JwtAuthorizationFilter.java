@@ -1,6 +1,6 @@
 package com.sparta.outsorcingproject.jwt;
 
-import com.sparta.outsorcingproject.entity.UserRoleEnum;
+import com.sparta.outsorcingproject.user.UserRoleEnum;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

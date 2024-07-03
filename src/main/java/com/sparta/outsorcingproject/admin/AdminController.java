@@ -1,10 +1,9 @@
 package com.sparta.outsorcingproject.admin;
 
-import com.sparta.outsorcingproject.dto.MenuRequestDto;
-import com.sparta.outsorcingproject.dto.MenuResponseDto;
-import com.sparta.outsorcingproject.dto.OrdersResponseDto;
-import com.sparta.outsorcingproject.dto.ReviewResponseDto;
-import com.sparta.outsorcingproject.entity.Review;
+import com.sparta.outsorcingproject.menu.MenuRequestDto;
+import com.sparta.outsorcingproject.menu.MenuResponseDto;
+import com.sparta.outsorcingproject.orders.OrdersResponseDto;
+import com.sparta.outsorcingproject.review.ReviewResponseDto;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

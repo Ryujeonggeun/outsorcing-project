@@ -1,14 +1,14 @@
 package com.sparta.outsorcingproject.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.outsorcingproject.entity.UserRoleEnum;
+import com.sparta.outsorcingproject.user.UserRoleEnum;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
-import com.sparta.outsorcingproject.dto.LoginRequestDto;
+import com.sparta.outsorcingproject.user.LoginRequestDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

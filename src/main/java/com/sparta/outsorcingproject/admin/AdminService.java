@@ -1,11 +1,18 @@
 package com.sparta.outsorcingproject.admin;
 
-import com.sparta.outsorcingproject.dto.MenuRequestDto;
-import com.sparta.outsorcingproject.dto.MenuResponseDto;
-import com.sparta.outsorcingproject.dto.OrdersResponseDto;
-import com.sparta.outsorcingproject.dto.ReviewResponseDto;
-import com.sparta.outsorcingproject.entity.*;
-import com.sparta.outsorcingproject.repository.*;
+import com.sparta.outsorcingproject.menu.Menu;
+import com.sparta.outsorcingproject.menu.MenuRepository;
+import com.sparta.outsorcingproject.menu.MenuRequestDto;
+import com.sparta.outsorcingproject.menu.MenuResponseDto;
+import com.sparta.outsorcingproject.orders.OrdersRepository;
+import com.sparta.outsorcingproject.orders.OrdersResponseDto;
+import com.sparta.outsorcingproject.review.ReviewResponseDto;
+import com.sparta.outsorcingproject.review.ReviewRepository;
+import com.sparta.outsorcingproject.store.Store;
+import com.sparta.outsorcingproject.store.StoreRepository;
+import com.sparta.outsorcingproject.user.User;
+import com.sparta.outsorcingproject.user.UserRepository;
+import com.sparta.outsorcingproject.user.UserRoleEnum;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

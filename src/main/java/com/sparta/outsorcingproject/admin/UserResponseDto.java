@@ -1,7 +1,7 @@
 package com.sparta.outsorcingproject.admin;
 
-import com.sparta.outsorcingproject.entity.User;
-import com.sparta.outsorcingproject.entity.UserRoleEnum;
+import com.sparta.outsorcingproject.user.User;
+import com.sparta.outsorcingproject.user.UserRoleEnum;
 import lombok.Getter;
 
 @Getter

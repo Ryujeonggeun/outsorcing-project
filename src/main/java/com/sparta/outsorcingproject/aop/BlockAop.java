@@ -1,6 +1,6 @@
 package com.sparta.outsorcingproject.aop;
 
-import com.sparta.outsorcingproject.entity.UserRoleEnum;
+import com.sparta.outsorcingproject.user.UserRoleEnum;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BlockAop {
 
-    @Around("execution(* com.sparta.outsorcingproject.controller.ReviewController.addReview(..))")
+    @Around("execution(* com.sparta.outsorcingproject.review.ReviewController.addReview(..))")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
         // 현재 사용자 정보 가져오기
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

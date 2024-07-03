@@ -1,6 +1,6 @@
 package com.sparta.outsorcingproject.config;
 
-import com.sparta.outsorcingproject.entity.UserRoleEnum;
+import com.sparta.outsorcingproject.user.UserRoleEnum;
 import com.sparta.outsorcingproject.excption.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import com.sparta.outsorcingproject.security.UserDetailsServiceImpl;

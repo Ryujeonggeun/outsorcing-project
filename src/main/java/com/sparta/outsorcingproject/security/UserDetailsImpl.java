@@ -1,8 +1,8 @@
 package com.sparta.outsorcingproject.security;
 
-import com.sparta.outsorcingproject.entity.UserRoleEnum;
+import com.sparta.outsorcingproject.user.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
-import com.sparta.outsorcingproject.entity.User;
+import com.sparta.outsorcingproject.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
