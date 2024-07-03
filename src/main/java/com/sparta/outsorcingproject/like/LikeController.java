@@ -16,17 +16,25 @@ public class LikeController {
     @PostMapping("/store/{storeId}")
     public ResponseEntity<String> storeLike(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long storeId
-    ) {
+            @PathVariable Long storeId)
+    {
         return likeService.storeLike(userDetails.getUser(), LikeContentType.STORE, storeId);
     }
 
     @PostMapping("/review/{reviewId}")
     public ResponseEntity<String> reviewLike(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long reviewId
-    ){
+            @PathVariable Long reviewId)
+    {
         return likeService.reviewLike(userDetails.getUser(),LikeContentType.REVIEW,reviewId);
+    }
+
+    @DeleteMapping("/{likeId}")
+    public ResponseEntity<String> unLike(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long likeId)
+    {
+    return likeService.unlike(userDetails.getUser(),likeId);
     }
 
     @PutMapping("/reload")

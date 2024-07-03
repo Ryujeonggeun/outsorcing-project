@@ -2,7 +2,10 @@ package com.sparta.outsorcingproject.like;
 
 import com.sparta.outsorcingproject.store.Store;
 import com.sparta.outsorcingproject.user.User;
+import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Locale;
 
 public interface LikeRepository extends JpaRepository<Like,Long> {
 
@@ -11,4 +14,9 @@ public interface LikeRepository extends JpaRepository<Like,Long> {
     boolean existsByUserAndContentTypeAndContentId(User user, LikeContentType contentType, Long contentId);
     Long countLikesByContentTypeAndContentId(LikeContentType contentType,Long contentId);
     Like findByUser(User user);
+
+
+    default Like findLikeById(Long likeId, MessageSource messageSource){
+        return findById(likeId).orElseThrow(()->new IllegalArgumentException(messageSource.getMessage("not.find.like",null, Locale.getDefault())));
+    }
 }

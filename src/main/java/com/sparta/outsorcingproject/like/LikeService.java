@@ -22,6 +22,8 @@ public class LikeService {
     private final MessageSource messageSource;
     private final ReviewRepository reviewRepository;
 
+
+
     @Transactional
     public ResponseEntity<String> storeLike(User user, LikeContentType contentType, Long contentId) {
 
@@ -73,6 +75,39 @@ public class LikeService {
 
         return ResponseEntity.ok("좋아요 완료");
     }
+
+    @Transactional
+    public ResponseEntity<String> unlike(User user,Long likeId) {
+
+        //존재하는 좋아요인지 확인
+        Like like =  likeRepository.findLikeById(likeId,messageSource);
+
+        //본인의 좋아요인지 확인하기
+        if (!like.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("자신의 좋아요만 취소 할 수 있습니다.");
+        }
+        //좋아요가 상점일때
+        if (like.getContentType().equals(LikeContentType.STORE)){
+            Store store = storeRepository.findStoreById(like.getContentId(),messageSource);
+            //좋아요를 삭제하고 해당 상점의 좋아요를 하나 내림
+            likeRepository.delete(like);
+            store.subtractCount();
+        }
+
+        //좋아요가 리뷰일때
+        if (like.getContentType().equals(LikeContentType.REVIEW)){
+            Review review = reviewRepository.findReviewById(like.getContentId(),messageSource);
+            //좋아요를 삭제하고 해당 리뷰의 좋아요를 하나 내림
+            likeRepository.delete(like);
+            review.subtractCount();
+        }
+
+        String message = like.getContentType() + " 좋아요 취소 완료";
+
+        return ResponseEntity.ok(message);
+    }
+
+
 
 
 
