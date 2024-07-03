@@ -4,7 +4,6 @@ import com.sparta.outsorcingproject.review.ReviewResponseDto;
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 import com.sparta.outsorcingproject.store.StoreResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -37,17 +36,15 @@ public class LikeController {
 
     //좋아요한 상점목록 조회
     @GetMapping("/store")
-    public ResponseEntity <Page <StoreResponseDto>> likesStoreList(@AuthenticationPrincipal UserDetailsImpl userDetails,
-    @RequestParam int page) {
-       Page<StoreResponseDto> likesStoreList = likeService.likesStoreList(userDetails.getUser(),page);
+    public ResponseEntity <List <StoreResponseDto>> likesStoreList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+       List<StoreResponseDto> likesStoreList = likeService.likesStoreList(userDetails.getUser());
        return ResponseEntity.ok(likesStoreList);
     }
 
     //좋아요한 리뷰목록 조회
     @GetMapping("/review")
-    public ResponseEntity <Page <ReviewResponseDto>> likesReviewList(@AuthenticationPrincipal UserDetailsImpl userDetails,
-    @RequestParam int page) {
-        Page<ReviewResponseDto> likeReviewList = likeService.likereviewList(userDetails.getUser(),page);
+    public ResponseEntity <List <ReviewResponseDto>> likesReviewList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<ReviewResponseDto> likeReviewList = likeService.likereviewList(userDetails.getUser());
         return ResponseEntity.ok(likeReviewList);
     }
 
