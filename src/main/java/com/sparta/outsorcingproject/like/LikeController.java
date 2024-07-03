@@ -1,7 +1,6 @@
-package com.sparta.outsorcingproject.controller;
+package com.sparta.outsorcingproject.like;
 
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
-import com.sparta.outsorcingproject.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,12 +16,12 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/{storeId}")
-    public ResponseEntity<String> updateLike(
+    @PostMapping("/store/{storeId}")
+    public ResponseEntity<String> storeLike(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long storeId
     ) {
-        return likeService.updateLike(userDetails.getUser(), storeId);
+        return likeService.storeLike(userDetails.getUser(), LikeContentType.STORE, storeId);
     }
 
 }
