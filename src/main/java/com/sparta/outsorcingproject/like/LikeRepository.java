@@ -1,12 +1,11 @@
 package com.sparta.outsorcingproject.like;
 
+import com.sparta.outsorcingproject.store.Store;
 import com.sparta.outsorcingproject.user.User;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Locale;
 
 public interface LikeRepository extends JpaRepository<Like,Long> {
@@ -22,6 +21,5 @@ public interface LikeRepository extends JpaRepository<Like,Long> {
         return findById(likeId).orElseThrow(()->new IllegalArgumentException(messageSource.getMessage("not.find.like",null, Locale.getDefault())));
     }
 
-    Page<Like> findByUserAndContentType(User user, LikeContentType likeContentType, Pageable pageable);
-
+    List<Like> findByUserAndContentType(User user, LikeContentType likeContentType);
 }
