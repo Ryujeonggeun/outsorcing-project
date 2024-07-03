@@ -2,6 +2,7 @@ package com.sparta.outsorcingproject.like;
 
 import com.sparta.outsorcingproject.review.Review;
 import com.sparta.outsorcingproject.review.ReviewRepository;
+import com.sparta.outsorcingproject.review.ReviewResponseDto;
 import com.sparta.outsorcingproject.store.Store;
 import com.sparta.outsorcingproject.store.StoreResponseDto;
 import com.sparta.outsorcingproject.user.User;
@@ -26,12 +27,11 @@ public class LikeService {
     private final ReviewRepository reviewRepository;
 
 
-
     @Transactional
     public ResponseEntity<String> storeLike(User user, LikeContentType contentType, Long contentId) {
 
         //존재하는 상점인지 확인
-        Store store =  storeRepository.findStoreById(contentId,messageSource);
+        Store store = storeRepository.findStoreById(contentId, messageSource);
 
         //자신의 상점이면 예외처리
         if (store.getUser().getId().equals(user.getId())) {
@@ -39,7 +39,7 @@ public class LikeService {
         }
 
         //이미 좋아요 했는지 확인하기
-        Boolean checkExist = likeRepository.existsByUserAndContentTypeAndContentId(user,contentType,contentId);
+        Boolean checkExist = likeRepository.existsByUserAndContentTypeAndContentId(user, contentType, contentId);
 
         if (!checkExist) {
             Like storeLike = new Like(user, contentType, contentId);
@@ -57,7 +57,7 @@ public class LikeService {
     public ResponseEntity<String> reviewLike(User user, LikeContentType contentType, Long contentId) {
 
         //존재하는 리뷰인지 확인
-        Review review =  reviewRepository.findReviewById(contentId,messageSource);
+        Review review = reviewRepository.findReviewById(contentId, messageSource);
 
         //자신의 리뷰면 예외처리
         if (review.getUser().getId().equals(user.getId())) {
@@ -65,7 +65,7 @@ public class LikeService {
         }
 
         //이미 좋아요 했는지 확인하기
-        Boolean isExist = likeRepository.existsByUserAndContentTypeAndContentId(user,contentType,contentId);
+        Boolean isExist = likeRepository.existsByUserAndContentTypeAndContentId(user, contentType, contentId);
 
         if (!isExist) {
             Like reviewLike = new Like(user, contentType, contentId);
@@ -80,26 +80,26 @@ public class LikeService {
     }
 
     @Transactional
-    public ResponseEntity<String> unlike(User user,Long likeId) {
+    public ResponseEntity<String> unlike(User user, Long likeId) {
 
         //존재하는 좋아요인지 확인
-        Like like =  likeRepository.findLikeById(likeId,messageSource);
+        Like like = likeRepository.findLikeById(likeId, messageSource);
 
         //본인의 좋아요인지 확인하기
         if (!like.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("자신의 좋아요만 취소 할 수 있습니다.");
         }
         //좋아요가 상점일때
-        if (like.getContentType().equals(LikeContentType.STORE)){
-            Store store = storeRepository.findStoreById(like.getContentId(),messageSource);
+        if (like.getContentType().equals(LikeContentType.STORE)) {
+            Store store = storeRepository.findStoreById(like.getContentId(), messageSource);
             //좋아요를 삭제하고 해당 상점의 좋아요를 하나 내림
             likeRepository.delete(like);
             store.subtractCount();
         }
 
         //좋아요가 리뷰일때
-        if (like.getContentType().equals(LikeContentType.REVIEW)){
-            Review review = reviewRepository.findReviewById(like.getContentId(),messageSource);
+        if (like.getContentType().equals(LikeContentType.REVIEW)) {
+            Review review = reviewRepository.findReviewById(like.getContentId(), messageSource);
             //좋아요를 삭제하고 해당 리뷰의 좋아요를 하나 내림
             likeRepository.delete(like);
             review.subtractCount();
@@ -114,6 +114,9 @@ public class LikeService {
     public List<StoreResponseDto> likesStoreList(User user) {
         //유저가 좋아요한 상점이 있는지 확인
         List<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.STORE);
+        if (likes.isEmpty()) {
+        throw new IllegalArgumentException("좋아요한 상점이 없습니다.");
+        }
 
         // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
@@ -123,13 +126,25 @@ public class LikeService {
             storeResponseDtoList.add(storeResponseDto);
         }
 
-        if (storeResponseDtoList.isEmpty()) {
-            throw new IllegalArgumentException("좋아요 한 상점이 없습니다.");
-        }
         return storeResponseDtoList;
     }
 
-
+    //좋아요한 리뷰 리스트
+    public List<ReviewResponseDto> likereviewList(User user) {
+        //유저가 좋아요한 리뷰가 있는지
+        List<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.REVIEW);
+        if (likes.isEmpty()) {
+            throw new IllegalArgumentException("좋아요한 리뷰가 없습니다.");
+        }
+        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
+        List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
+        for (Like like : likes) {
+            Review review = reviewRepository.findReviewById(like.getContentId(), messageSource);
+            ReviewResponseDto reviewResponseDto = new ReviewResponseDto(review);
+            reviewResponseDtoList.add(reviewResponseDto);
+        }
+        return reviewResponseDtoList;
+    }
 
     // 좋아요 리로딩
     @Transactional
@@ -148,7 +163,6 @@ public class LikeService {
             reviewRepository.save(review);
         }
     }
-
 
 
 }
