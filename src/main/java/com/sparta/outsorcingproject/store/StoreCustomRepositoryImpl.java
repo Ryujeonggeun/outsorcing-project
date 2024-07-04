@@ -37,7 +37,7 @@ public class StoreCustomRepositoryImpl implements StoreCustomRepository {
                 .fetch();
 
         if (likedStoreIds.isEmpty()) {
-            return Page.empty(pageable);
+            throw new IllegalArgumentException("좋아요한 상점이 없습니다.");
         }
 
         // 좋아요한 상점조회

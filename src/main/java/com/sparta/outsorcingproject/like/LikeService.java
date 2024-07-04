@@ -113,11 +113,20 @@ public class LikeService {
         return ResponseEntity.ok(message);
     }
 
+    // 좋아요한 상점 리스트
     @Transactional(readOnly = true)
     public Page<StoreResponseDto> likesStoreList(User user, int page) {
         Pageable pageable = PageRequest.of(page, 5);
         return storeRepository.findLikedStoresByUser(user, pageable);
     }
+
+    //좋아요한 리뷰 리스트
+    @Transactional(readOnly = true)
+    public Page<ReviewResponseDto> likesReviewList(User user, int page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        return reviewRepository.findLikedReviewByUser(user, pageable);
+    }
+
 
     // 좋아요한 상점 리스트
 //    public Page<StoreResponseDto> likesStoreList(User user, int page) {
@@ -137,26 +146,26 @@ public class LikeService {
 //        return likeStoreList;
 //    }
 
-    //좋아요한 리뷰 리스트
-    public Page<ReviewResponseDto> likereviewList(User user, int page) {
-
-        //페이지네이션 및 정렬
-
-        Pageable pageable = PageRequest.of(page,5, Sort.by(Sort.Direction.DESC, "createdAt"));
-        //유저가 좋아요한 리뷰가 있는지
-        Page<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.REVIEW,pageable);
-        if (likes.isEmpty()) {
-            throw new IllegalArgumentException("좋아요한 리뷰가 없습니다.");
-        }
-
-        Page<ReviewResponseDto> likeReviewList = likes.map(like -> {
-            Review review = reviewRepository.findReviewById(like.getContentId(), messageSource);
-            return new ReviewResponseDto(review);
-        });
-
-
-        return likeReviewList;
-    }
+//    //좋아요한 리뷰 리스트
+//    public Page<ReviewResponseDto> likereviewList(User user, int page) {
+//
+//        //페이지네이션 및 정렬
+//
+//        Pageable pageable = PageRequest.of(page,5, Sort.by(Sort.Direction.DESC, "createdAt"));
+//        //유저가 좋아요한 리뷰가 있는지
+//        Page<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.REVIEW,pageable);
+//        if (likes.isEmpty()) {
+//            throw new IllegalArgumentException("좋아요한 리뷰가 없습니다.");
+//        }
+//
+//        Page<ReviewResponseDto> likeReviewList = likes.map(like -> {
+//            Review review = reviewRepository.findReviewById(like.getContentId(), messageSource);
+//            return new ReviewResponseDto(review);
+//        });
+//
+//
+//        return likeReviewList;
+//    }
 
     // 좋아요 리로딩
     @Transactional

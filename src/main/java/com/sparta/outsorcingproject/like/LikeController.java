@@ -47,7 +47,7 @@ public class LikeController {
     @GetMapping("/review")
     public ResponseEntity <Page <ReviewResponseDto>> likesReviewList(@AuthenticationPrincipal UserDetailsImpl userDetails,
     @RequestParam int page) {
-        Page<ReviewResponseDto> likeReviewList = likeService.likereviewList(userDetails.getUser(),page);
+        Page<ReviewResponseDto> likeReviewList = likeService.likesReviewList(userDetails.getUser(),page);
         return ResponseEntity.ok(likeReviewList);
     }
 
