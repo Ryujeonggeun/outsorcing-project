@@ -11,6 +11,8 @@ public class ProfileResponseDto {
     
     private String username;
     private String introduce;
+    private Long likedStoreCount;
+    private Long likedReviewCount;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String profileUrl;
@@ -19,5 +21,13 @@ public class ProfileResponseDto {
         this.username = user.getUsername();
         this.introduce = user.getIntroduce();
         this.profileUrl = user.getProfileUrl();
+    }
+
+    public ProfileResponseDto(User user,Long likedStoreCount,Long likedReviewCount) {
+        this.username = user.getUsername();
+        this.introduce = user.getIntroduce();
+        this.profileUrl = user.getProfileUrl();
+        this.likedStoreCount = likedStoreCount;
+        this.likedReviewCount = likedReviewCount;
     }
 }

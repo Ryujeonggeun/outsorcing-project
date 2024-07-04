@@ -19,14 +19,19 @@ public class ProfileService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final  ProfileRepository profileRepository;
 
     public ResponseEntity<ProfileResponseDto> showProfile(ProfileRequestDto requestDto) {
         String username = requestDto.getUsername();
 
         User requestUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "잘못된 접근입니다."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "찾는 유저가 없습니다."));
 
-        return ResponseEntity.ok(new ProfileResponseDto(requestUser));
+        ProfileResponseDto profile =  profileRepository.findUserProfileWithLikes(requestUser);
+
+
+
+        return ResponseEntity.ok(profile);
     }
 
     @Transactional
