@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Locale;
 
-public interface StoreRepository extends JpaRepository<Store, Long> {
+public interface StoreRepository extends JpaRepository<Store, Long> ,StoreCustomRepository{
 
     /** 존재하지 않는 가게 **/
     default Store findStoreById(Long id, MessageSource messageSource) {

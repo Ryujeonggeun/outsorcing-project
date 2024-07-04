@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LikeService {
-
     private final LikeRepository likeRepository;
     private final StoreRepository storeRepository;
     private final MessageSource messageSource;
@@ -114,32 +113,29 @@ public class LikeService {
         return ResponseEntity.ok(message);
     }
 
-    // 좋아요한 상점 리스트
+    @Transactional(readOnly = true)
     public Page<StoreResponseDto> likesStoreList(User user, int page) {
-        //페이지네이션 및 정렬
-        Pageable pageable =  PageRequest.of(page,5, Sort.by(Sort.Direction.DESC, "createdAt"));
-        //유저가 좋아요한 상점이 있는지 확인
-        Page<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.STORE,pageable);
-        if (likes.isEmpty()) {
-        throw new IllegalArgumentException("좋아요한 상점이 없습니다.");
-        }
-
-        Page<StoreResponseDto> likeStoreList = likes.map(like -> {
-            Store store = storeRepository.findStoreById(like.getContentId(), messageSource);
-            return new StoreResponseDto(store);
-        });
-
-//        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
-//        List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
-//        for (Like like : likes) {
-//            Store store = storeRepository.findStoreById(like.getContentId(), messageSource);
-//            StoreResponseDto storeResponseDto = new StoreResponseDto(store);
-//            storeResponseDtoList.add(storeResponseDto);
-//        }
-//        //  List<StoreResponseDto> -> Page 객체로 변환해서 반환
-
-        return likeStoreList;
+        Pageable pageable = PageRequest.of(page, 5);
+        return storeRepository.findLikedStoresByUser(user, pageable);
     }
+
+    // 좋아요한 상점 리스트
+//    public Page<StoreResponseDto> likesStoreList(User user, int page) {
+//        //페이지네이션 및 정렬
+//        Pageable pageable =  PageRequest.of(page,5, Sort.by(Sort.Direction.DESC, "createdAt"));
+//        //유저가 좋아요한 상점이 있는지 확인
+//        Page<Like> likes = likeRepository.findByUserAndContentType(user, LikeContentType.STORE,pageable);
+//        if (likes.isEmpty()) {
+//        throw new IllegalArgumentException("좋아요한 상점이 없습니다.");
+//        }
+//
+//        Page<StoreResponseDto> likeStoreList = likes.map(like -> {
+//            Store store = storeRepository.findStoreById(like.getContentId(), messageSource);
+//            return new StoreResponseDto(store);
+//        });
+//
+//        return likeStoreList;
+//    }
 
     //좋아요한 리뷰 리스트
     public Page<ReviewResponseDto> likereviewList(User user, int page) {
@@ -159,13 +155,6 @@ public class LikeService {
         });
 
 
-        // 해당 유저가 좋아요 한 상점 가져오기 및 Store -> StoreResponseDto로 변환
-//        Page<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
-//        for (Like like : likes) {
-//            Review review = reviewRepository.findReviewById(like.getContentId(), messageSource);
-//            ReviewResponseDto reviewResponseDto = new ReviewResponseDto(review);
-//            reviewResponseDtoList.add(reviewResponseDto);
-//        }
         return likeReviewList;
     }
 
