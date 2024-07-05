@@ -45,7 +45,7 @@ public class FollowCustomRepositoryImpl implements FollowCustomRepository{
         List<Orders> ordersList = jpaQueryFactory
                 .selectFrom(qOrders)
                 .where(qOrders.user.id.in(followedUserIds))
-                .orderBy(qOrders.createdAt.desc())
+                .orderBy(qOrders.createdAt.desc(),qOrders.user.username.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

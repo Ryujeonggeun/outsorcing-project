@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -137,7 +138,7 @@ public class OrdersService {
 			)
 		);
 
-		Pageable pageable = PageRequest.of(page,size);
+		Pageable pageable = PageRequest.of(page,size, Sort.by(user.getUsername()).ascending());
 
 
 		return followRepository.findFollowedOrdersByUser(follower,pageable);
