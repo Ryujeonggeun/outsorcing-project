@@ -1,18 +1,17 @@
 package com.sparta.outsorcingproject.follower;
 
+import com.sparta.outsorcingproject.profile.ProfileResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.sparta.outsorcingproject.security.UserDetailsImpl;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Controller
 @RestController
@@ -22,6 +21,7 @@ public class FollowerController {
 
 	public static final String SUCCESSFULLY_UNFOLLOWED = "언팔로우 되었습니다.";
 	private final FollowService followService;
+
 
 	@PostMapping("/{followerId}")
 	public ResponseEntity<FollowResponseDto> follow(
@@ -41,5 +41,11 @@ public class FollowerController {
 		followService.unfollow(followerId, userDetails.getUser().getId());
 
 		return ResponseEntity.ok().body(SUCCESSFULLY_UNFOLLOWED);
+	}
+
+	@GetMapping("/top10")
+	public ResponseEntity<List<ProfileResponseDto>> getTop10FollowedUsers() {
+		List<ProfileResponseDto> topFollowedUsers = followService.getTopFollowedUsers();
+		return ResponseEntity.ok(topFollowedUsers);
 	}
 }

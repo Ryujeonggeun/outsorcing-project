@@ -1,7 +1,9 @@
 package com.sparta.outsorcingproject.follower;
 
+import java.util.List;
 import java.util.Locale;
 
+import com.sparta.outsorcingproject.profile.ProfileResponseDto;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +75,9 @@ public class FollowService {
 		);
 
 		followRepository.delete(findFollower);
+	}
+
+	public List<ProfileResponseDto> getTopFollowedUsers() {
+		return followRepository.findTop10FollowedUsersProfile();
 	}
 }
