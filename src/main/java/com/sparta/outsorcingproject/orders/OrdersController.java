@@ -2,6 +2,7 @@ package com.sparta.outsorcingproject.orders;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,11 +55,13 @@ public class OrdersController {
 	}
 
 	@GetMapping("/follow/{followerId}")
-	public ResponseEntity<List<OrdersResponseDto>> getFollowedOrders(
+	public ResponseEntity<Page<OrdersResponseDto>> getFollowedOrders(
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
-		@PathVariable long followerId) {
+		@PathVariable long followerId,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "5") int size) {
 
-		List<OrdersResponseDto> allByFollow = ordersService.findAllByFollow(userDetails.getUser(), followerId);
+		Page<OrdersResponseDto> allByFollow = ordersService.findAllByFollow(userDetails.getUser(), followerId,page,size);
 
 		return ResponseEntity.ok().body(allByFollow);
 	}

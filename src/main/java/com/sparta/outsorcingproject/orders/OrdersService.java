@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -129,27 +130,16 @@ public class OrdersService {
 		}
 	}
 
-	public List<OrdersResponseDto> findAllByFollow(User user, long followerId) {
+	public Page<OrdersResponseDto> findAllByFollow(User user, long followerId, int page, int size) {
 		User follower = userRepository.findById(followerId).orElseThrow(
 			() -> new IllegalArgumentException(
 				messageSource.getMessage("not.find.user", null, Locale.getDefault())
 			)
 		);
 
-		followRepository.findByFollowerAndMe(follower, user).orElseThrow(
-			() -> new IllegalArgumentException(
-				messageSource.getMessage("not.find.follower", null, Locale.getDefault())
-			)
-		);
+		Pageable pageable = PageRequest.of(page,size);
 
-		List<OrdersResponseDto> responseDtoList = new ArrayList<>();
 
-		List<Orders> followerOrdersList = ordersRepository.findAllByUserOrderByCreatedAtDesc(follower);
-
-		for (Orders orders : followerOrdersList) {
-			responseDtoList.add(new OrdersResponseDto(orders));
-		}
-
-		return responseDtoList;
+		return followRepository.findFollowedOrdersByUser(follower,pageable);
 	}
 }
